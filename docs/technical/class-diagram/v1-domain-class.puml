@@ -1,0 +1,119 @@
+@startuml
+
+@startuml
+
+package "Gestion des utilisateurs" {
+  class User {
+    -String username
+    -String password
+    -Email email
+    -Profile profile
+    -Subscription subscription
+    +register()
+    +login()
+    +updateProfile(Profile profile)
+  }
+
+  class Profile {
+    -String firstName
+    -String lastName
+    -Address address
+    +updateAddress(Address newAddress)
+  }
+
+  class Email {
+    -String emailAddress
+  }
+
+  class Address {
+    -String street
+    -String city
+    -String zipCode
+    -String country
+  }
+
+  class Subscription {
+    -Date startDate
+    -SubscriptionType type
+    -SubscriptionStatus status
+    +updateSubscriptionType(SubscriptionType type)
+  }
+}
+
+package "Catalogue de contenu" {
+  class Video {
+    -String title
+    -Duration duration
+    -VideoMetadata metadata
+    +getVideoDetails()
+    +updateMetadata(VideoMetadata metadata)
+  }
+
+  class Series extends Video {
+    -List<Episode> episodes
+    +addEpisode(Episode episode)
+    }
+
+
+  class Episode {
+    -String episodeTitle
+    -int episodeNumber
+    -Duration duration
+  }
+
+  class VideoMetadata {
+    -String genre
+    -String director
+    -Date releaseDate
+  }
+
+  class Duration {
+    -int hours
+    -int minutes
+  }
+}
+
+package "Interaction des utilisateurs" {
+  class Comment {
+    -User user
+    -String text
+    -Date timestamp
+    +editComment(String newText)
+  }
+
+  class Review extends Comment {
+    -int rating
+  }
+}
+
+package "Analytics et Reporting" {
+  class Report {
+    -DateRange dateRange
+    -List metrics
+    -List dimensions
+    +generateReport()
+        -Metric metrics
+        +generateReport()
+      }
+
+      class Metric {
+        -String name
+        -double value
+      }
+
+      class DateRange {
+        -Date startDate
+        -Date endDate
+      }
+    }
+
+    ' Associations
+    User "1" -- "0..*" Comment : writes >
+    User "1" -- "1" Profile : has >
+    User "1" -- "0..1" Subscription : subscribes >
+    Video "1" -- "0..*" Episode : includes >
+    Series "1" -- "*" Episode : contains >
+
+    @enduml
+
+@enduml
