@@ -1,0 +1,108 @@
+@startuml strict
+skinparam style strictuml
+
+interface IViewable {
+    +viewContent()
+}
+
+interface ICommentable {
+    +addComment(Comment comment)
+}
+
+class User {
+    -String username
+    -String password
+    -Email email
+    -Profile profile
+    -Subscription subscription
+}
+
+class Profile {
+    -String firstName
+    -String lastName
+    -Address address
+}
+
+class Email {
+    -String emailAddress
+}
+
+class Address {
+    -String street
+    -String city
+    -String zipCode
+    -String country
+}
+
+class Subscription {
+    -Date startDate
+    -SubscriptionType type
+    -SubscriptionStatus status
+}
+
+enum SubscriptionType {
+    BASIC
+    PREMIUM
+    FAMILY
+}
+
+enum SubscriptionStatus {
+    ACTIVE
+    SUSPENDED
+    CANCELLED
+}
+
+class Video implements IViewable, ICommentable {
+    -String title
+    -Duration duration
+    -VideoMetadata metadata
+}
+
+class Series extends Video {
+    -List
+}
+
+class Episode implements IViewable {
+    -String episodeTitle
+    -int episodeNumber
+    -Duration duration
+}
+
+class VideoMetadata {
+    -String genre
+    -String director
+    -Date releaseDate
+}
+
+class Duration {
+    -int hours
+    -int minutes
+}
+
+class Comment {
+    -User user
+    -String text
+    -Date timestamp
+}
+
+class Review extends Comment {
+    -int rating
+}
+
+' Associations and Relationships
+User "1" -- "*" Comment : writes >
+User "1" o-- "1" Email : has >
+User "1" o-- "1" Profile : has >
+User "1" o-- "1" Subscription : has >
+Profile "1" *-- "1" Address : lives at >
+Video "1" o-- "1" Duration : duration >
+Video "1" o-- "1" VideoMetadata : metadata >
+Series "1" *-- "*" Episode : includes >
+Comment "1" <-- "1" User : commented by >
+
+' Implementing Interfaces
+' Video ..|> IViewable
+' Video ..|> ICommentable
+'Episode ..|> IViewable
+
+@enduml

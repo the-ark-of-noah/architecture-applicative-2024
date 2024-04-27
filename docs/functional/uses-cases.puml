@@ -1,0 +1,58 @@
+@startuml EPSIFLIX
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client par Abonnement" as Client
+actor "Utilisateur sans Abonnement" as Visitor
+actor "Professionnel de l'Industrie" as Professional
+actor "Administrateur" as Admin
+actor "Équipe EPSIFLIX" as Team
+
+rectangle EPSIFLIX {
+  ' Use cases for a subscribed client
+  usecase "Visionner Contenus Illimités" as UC1
+  usecase "Poster des Commentaires" as UC2
+  usecase "Participer à des Forums" as UC3
+  usecase "Enregistrer Contenus Favoris" as UC4
+  usecase "Accéder à des Statistiques Détaillées" as UC5
+
+  ' Use cases for a visitor
+  usecase "Consulter le Catalogue Complet" as UC6
+  usecase "Accéder aux Bandes-Annonces" as UC7
+  usecase "Lire des Descriptions" as UC8
+
+  ' Use cases for a professional
+  usecase "Envoyer Nouveaux Contenus" as UC9
+  usecase "Accéder au Tableau de Bord" as UC10
+  usecase "Organiser des Webinaires" as UC11
+
+  ' Use cases for an administrator
+  usecase "Gérer les Contenus" as UC12
+  usecase "Gérer les Utilisateurs" as UC13
+  usecase "Suivre Interactions Utilisateurs" as UC14
+  usecase "Analyser Comportements de Visionnage" as UC15
+
+  ' Use cases for the EPSIFLIX team
+  usecase "Sélectionner Coups de Coeur" as UC16
+
+  ' Relations
+  Client -up-> UC1
+  Client -up-> UC2
+  Client -up-> UC3
+  Client -up-> UC4
+  Client -up-> UC5
+  Visitor -up-> UC6
+  Visitor -up-> UC7
+  Visitor -up-> UC8
+  Professional -up-> UC9
+  Professional -up-> UC10
+  Professional -up-> UC11
+  Admin -up-> UC12
+  Admin -up-> UC13
+  Admin -up-> UC14
+  Admin -up-> UC15
+  Team -up-> UC16
+}
+
+@enduml
