@@ -1,0 +1,53 @@
+@startuml
+left to right direction
+
+title Projet EPSIFLIX - Diagramme de Cas d'Utilisation
+
+actor Administrateur as Admin
+actor "Client sans abonnement" as ClientSansAbonnement
+actor "Client avec abonnement" as ClientAvecAbonnement
+actor "Professionnel audiovisuel" as ProfessionnelAudiovisuel
+actor "Equipe EPSIFLIX" as EquipeEPSIFLIX
+actor Utilisateurs as Utilisateurs
+
+rectangle EPSIFLIX {
+    (Se connecter) as (Connexion)
+    (Accéder au catalogue complet) as (Catalogue)
+    (Enregistrer du contenu) as (Enregistrement)
+    (Accéder aux détails des contenus) as (Détails)
+    (Visionner en illimité les contenus) as (VisionnageIllimité)
+    (Poster des commentaires) as (Commentaires)
+    (Accéder au forum de discussion) as (Forum)
+    (Accéder au tableau de bord des préférences utilisateurs) as (TableauDeBord)
+    (Organiser des lives) as (Lives)
+    (Visionner des lives) as (VisionnageLives)
+    (Gérer de manière avancée les contenus et utilisateurs) as (GestionAvancée)
+    (Modérer les interactions entre utilisateurs) as (Modération)
+    (Accéder à un tableau de bord d'analyse) as (TableauDeBordAnalyse)
+    (Classer les contenus par catégories) as (Classement)
+    (Envoyer de nouveaux contenus) as (EnvoiContenus)
+}
+
+ClientSansAbonnement -> ClientAvecAbonnement
+Utilisateurs --> ClientSansAbonnement
+Utilisateurs --> ProfessionnelAudiovisuel
+Utilisateurs --> Admin
+Utilisateurs --> EquipeEPSIFLIX
+
+Utilisateurs -- (Connexion)
+ClientSansAbonnement -- (Catalogue)
+ClientSansAbonnement -- (Enregistrement)
+ClientSansAbonnement -- (Détails)
+ClientAvecAbonnement -- (VisionnageIllimité)
+ClientAvecAbonnement -- (Commentaires)
+ClientAvecAbonnement -- (Forum)
+ClientAvecAbonnement -- (VisionnageLives)
+ProfessionnelAudiovisuel -- (TableauDeBord)
+ProfessionnelAudiovisuel -- (Lives)
+ProfessionnelAudiovisuel -- (EnvoiContenus)
+Admin -- (GestionAvancée)
+Admin -- (Modération)
+Admin -- (TableauDeBordAnalyse)
+EquipeEPSIFLIX -- (Classement)
+
+@enduml
