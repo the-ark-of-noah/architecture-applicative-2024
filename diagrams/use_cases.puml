@@ -26,6 +26,7 @@ rectangle EPSIFLIX {
     (Accéder à un tableau de bord d'analyse) as (TableauDeBordAnalyse)
     (Classer les contenus par catégories) as (Classement)
     (Envoyer de nouveaux contenus) as (EnvoiContenus)
+    (Donner des coups de coeur sur les contenus) as (CoupDeCoeur)
 }
 
 ClientSansAbonnement -> ClientAvecAbonnement
@@ -49,5 +50,6 @@ Admin -- (GestionAvancée)
 Admin -- (Modération)
 Admin -- (TableauDeBordAnalyse)
 EquipeEPSIFLIX -- (Classement)
+EquipeEPSIFLIX -- (CoupDeCoeur)
 
 @enduml
