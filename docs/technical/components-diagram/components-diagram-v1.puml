@@ -1,0 +1,47 @@
+@startuml epsiflix-arch
+skinparam componentStyle uml2
+
+package "EPSIFLIX Web Platform" {
+
+  component "Web Frontend" as Frontend {
+    [UI Components]
+    [Static Resources]
+  }
+
+  component "Backend Server" as Backend {
+    [User Service]
+    [Video Service]
+    [Subscription Service]
+    [Payment Integration]
+    [Analytics Integration]
+  }
+
+  component "Database" as DB {
+    [User Data]
+    [Video Metadata]
+    [Subscription Data]
+  }
+
+  component "Object Storage" as Storage {
+    [Video Files]
+  }
+
+  component "External Services" {
+    component "Authentication Service" as Auth
+    component "Analytics Service" as Analytics
+    component "Payment Service" as Payment
+  }
+
+  ' Connections
+  Frontend --> Backend : Sends user requests
+  Backend --> DB : Queries data
+  Backend --> Storage : Stores and retrieves videos
+  Backend --> Auth : Validates users
+  Backend --> Analytics : Sends data
+  Backend --> Payment : Manages payments
+
+  DB -[hidden]- Storage
+  Auth -[hidden]- Analytics
+}
+
+@enduml

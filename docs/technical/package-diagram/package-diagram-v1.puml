@@ -1,0 +1,55 @@
+@startuml components 
+
+package "Présentation" {
+  component "Interface Utilisateur Web" as UI {
+ '   note left: Gère l'interaction avec l'utilisateur
+  }
+  component "API Web" as API {
+    'note right: Point d'entrée pour les requêtes externes
+  }
+}
+
+package "Logique Métier" {
+  component "Gestion des Utilisateurs" as UserManager
+  component "Gestion des Vidéos" as VideoManager
+  component "Gestion des Abonnements" as SubscriptionManager
+}
+
+package "Données" {
+  component "Base de Données" as DB {
+    note right: Stocke les informations utilisateurs, abonnements, et métadonnées de vidéos
+  }
+  component "Stockage d'Objets" as ObjectStorage {
+    note right: Stocke les fichiers vidéo
+  }
+}
+
+package "Services Externes" {
+  component "Service d'Authentification" as AuthService {
+    note left: Gère l'authentification et la sécurité
+  }
+  component "Service d'Analyse" as AnalyticsService {
+    note left: Fournit des analyses sur l'utilisation et les comportements des utilisateurs
+  }
+  component "Service de Paiement" as PaymentService {
+    note left: Gère les transactions et les abonnements payants
+  }
+}
+
+' Relations
+UI ..> API : Utilise
+API ..> UserManager : Utilise
+API ..> VideoManager : Utilise
+API ..> SubscriptionManager : Utilise
+
+UserManager ..> DB : Utilise
+VideoManager ..> DB : Utilise
+VideoManager ..> ObjectStorage : Utilise
+SubscriptionManager ..> DB : Utilise
+SubscriptionManager ..> PaymentService : Utilise
+
+AuthService ..> UserManager : Valide
+AnalyticsService ..> API : Collecte les données
+PaymentService ..> SubscriptionManager : Gère les paiements
+
+@enduml
