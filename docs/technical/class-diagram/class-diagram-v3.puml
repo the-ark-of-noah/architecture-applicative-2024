@@ -1,0 +1,95 @@
+@startuml
+class Utilisateur {
+    +identifiant: String
+    +motDePasse: String
+}
+
+class ClientSansAbonnement {
+    +choisirContenu(): void
+    +enregistrerContenu(): void
+    +voirDetailsContenu(): void
+}
+
+class ClientAvecAbonnement {
+    +visionnerIllimite(): void
+    +posterCommentaire(): void
+    +accederForum(): void
+    +visionnerLive(): void
+}
+
+class ProfessionnelAudiovisuel {
+    +accederTableauDeBord(): void
+    +organiserLive(): void
+    +envoyerContenu(): void
+}
+
+class Administrateur {
+    +gererContenusUtilisateurs(): void
+    +modererInteractions(): void
+    +accederTableauDeBordAnalyse(): void
+}
+
+class EquipeEPSIFLIX {
+    +classerContenus(): void
+    +donnerCoupDeCoeur(): void
+}
+
+Utilisateur "1"--o ClientSansAbonnement
+Utilisateur "1"--o ClientAvecAbonnement
+Utilisateur "1"--o ProfessionnelAudiovisuel
+Utilisateur "1"--o Administrateur
+Utilisateur "1"--o EquipeEPSIFLIX
+
+class Contenu {
+    +titre: String
+    +categorie: String
+    +description: String
+}
+
+class Catalogue {
+    +contenus: List
+}
+
+class BandeAnnonce {
+    +lien: String
+}
+
+class Commentaire {
+    +utilisateur: Utilisateur
+    +contenu: String
+    +date: Date
+}
+
+class Forum {
+    +saison: String
+}
+
+class Live {
+    +theme: String
+}
+
+class Analyse {
+    +tendancesConsommation: String
+    +performancesContenus: String
+    +statistiquesPreferences: String
+}
+
+class Moderation {
+    +suiviInteractions: String
+    +moderer: void
+}
+
+class PreferenceUtilisateur {
+    +categoriePreferee: String
+}
+
+Catalogue "1" -- "0..*" Contenu
+Catalogue "1" *-- "0..1" BandeAnnonce
+Contenu "1" *-- "0..*" Commentaire
+Contenu "1" *-- "0..*" Forum
+Contenu "1" *-- "0..*" Live
+Contenu "1" *-- "0..1" Analyse
+Commentaire "1" *-- "1" Utilisateur
+Moderation "1" *-- "1" Utilisateur
+PreferenceUtilisateur "1" -- "1" Utilisateur
+@enduml

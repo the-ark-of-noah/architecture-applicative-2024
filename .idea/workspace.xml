@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b679f5d0-68bf-4692-ad05-13c3abdf9551" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/diagrams/use_cases.puml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/functional/uses-cases.puml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/functional/uses-cases.puml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/technical/class-diagram/class-diagram-v3.puml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,23 +24,29 @@
 }</component>
   <component name="ProjectId" id="2ffpUt8eE77PwscN3z9ymdXnlNp" />
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/erwanbuisson/Library/Mobile Documents/com~apple~CloudDocs/Documents/EPSI/I1/Architecture applicative/architecture-applicative-2024&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.plantuml.idea.settings.PlantUmlSettingsPage&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/erwanbuisson/Library/Mobile Documents/com~apple~CloudDocs/Documents/EPSI/I1/Architecture applicative/architecture-applicative-2024/docs/technical/class-diagram",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.plantuml.idea.settings.PlantUmlSettingsPage",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/technical/class-diagram" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -61,6 +67,8 @@
       <workItem from="1714203190803" duration="343000" />
       <workItem from="1714203544575" duration="228000" />
       <workItem from="1714203787237" duration="4606000" />
+      <workItem from="1714208568325" duration="1251000" />
+      <workItem from="1714310124776" duration="1651000" />
     </task>
     <servers />
   </component>
