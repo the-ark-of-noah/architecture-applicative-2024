@@ -3,15 +3,20 @@ skinparam componentStyle uml2
 
 package "EPSIFLIX Web Platform" {
 
+' Responsable de la présentation et de l'interaction avec l'utilisateur
   component "Web Frontend" as Frontend {
     [UI Components]
     [Static Resources]
   }
 
   component "Backend Server" as Backend {
+    ' Gère les opérations liées aux utilisateurs, comme l'enregistrement, la connexion, et la gestion de profils.
     [User Service]
+    ' Responsable de la gestion des vidéos, y compris le stockage, la récupération, et les métadonnées associées.
     [Video Service]
+    'Gère les abonnements des utilisateurs, y compris les activations, les renouvellements, et les annulations.
     [Subscription Service]
+    'ntégration avec des services de paiement pour gérer les transactions financières.
     [Payment Integration]
     [Analytics Integration]
   }
@@ -31,6 +36,7 @@ package "EPSIFLIX Web Platform" {
     component "Analytics Service" as Analytics
     component "Payment Service" as Payment
   }
+
 
   ' Connections
   Frontend --> Backend : Sends user requests
