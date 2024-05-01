@@ -1,0 +1,96 @@
+@startuml
+actor Utilisateur
+
+autonumber
+Utilisateur -> Catalogue: Consulter catalogue
+activate Catalogue
+alt Utilisateur avec abonnement
+    Utilisateur -> Catalogue: Accéder au forum
+    activate Catalogue
+    Utilisateur <-- Catalogue: Afficher le forum
+else Utilisateur sans abonnement
+    Utilisateur -> Catalogue: Accéder au forum
+    activate Catalogue
+    Utilisateur <-- Catalogue: Rediriger vers page abonnement
+    deactivate Catalogue
+end
+@enduml
+
+@startuml
+autonumber
+
+actor Utilisateur
+participant Contenu
+participant Commentaire
+
+Utilisateur -> Contenu: Consulter contenu
+activate Contenu
+Utilisateur -> Commentaire: Rédiger commentaire
+activate Commentaire
+Utilisateur --> Commentaire: Poster commentaire
+deactivate Commentaire
+Utilisateur <-- Contenu: Afficher commentaire posté
+deactivate Contenu
+@enduml
+
+@startuml
+autonumber
+
+actor ProfessionnelAudiovisuel
+participant Catalogue
+participant Contenu
+
+ProfessionnelAudiovisuel -> Catalogue: Accéder au catalogue
+activate Catalogue
+ProfessionnelAudiovisuel -> Contenu: Envoyer contenu
+activate Contenu
+ProfessionnelAudiovisuel <-- Contenu: Confirmation d'envoi
+deactivate Contenu
+ProfessionnelAudiovisuel <-- Catalogue: Retour au catalogue
+deactivate Catalogue
+@enduml
+
+@startuml
+autonumber
+
+actor Administrateur
+participant Utilisateur
+
+Administrateur -> Utilisateur: Rechercher utilisateur
+activate Utilisateur
+Administrateur <-- Utilisateur: Résultats recherche
+deactivate Utilisateur
+
+alt Utilisateur à modifier
+    Administrateur -> Utilisateur: Modifier utilisateur
+    activate Utilisateur
+    Administrateur <-- Utilisateur: Confirmation modification
+    deactivate Utilisateur
+else Utilisateur non trouvé
+    Administrateur <-- Utilisateur: Aucun utilisateur trouvé
+end
+@enduml
+
+@startuml
+autonumber
+
+actor Utilisateur
+participant InterfaceUtilisateur
+participant BaseDeDonnees
+
+Utilisateur -> InterfaceUtilisateur: Accéder à l'interface de réinitialisation
+activate InterfaceUtilisateur
+InterfaceUtilisateur -> Utilisateur: Demander l'adresse e-mail de récupération
+Utilisateur -> InterfaceUtilisateur: Fournir l'adresse e-mail
+InterfaceUtilisateur -> BaseDeDonnees: Vérifier l'adresse e-mail
+activate BaseDeDonnees
+BaseDeDonnees --> InterfaceUtilisateur: Adresse e-mail valide
+InterfaceUtilisateur -> BaseDeDonnees: Générer un lien de réinitialisation
+BaseDeDonnees --> InterfaceUtilisateur: Lien de réinitialisation généré
+deactivate BaseDeDonnees
+InterfaceUtilisateur -> Utilisateur: Afficher lien de réinitialisation
+Utilisateur -> InterfaceUtilisateur: Cliquer sur le lien de réinitialisation
+InterfaceUtilisateur -> BaseDeDonnees: Réinitialiser le mot de passe
+BaseDeDonnees --> InterfaceUtilisateur: Mot de passe réinitialisé
+deactivate InterfaceUtilisateur
+@enduml
