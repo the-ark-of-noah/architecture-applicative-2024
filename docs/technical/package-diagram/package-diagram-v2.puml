@@ -1,0 +1,55 @@
+@startuml
+
+package "Utilisateurs" {
+    [ClientSansAbonnement]
+    [ClientAvecAbonnement]
+    [ProfessionnelAudiovisuel]
+    [Administrateur]
+    [EquipeEPSIFLIX]
+}
+
+package "Contenus" {
+    [Contenu]
+    [BandeAnnonce]
+
+    Contenu --> BandeAnnonce : utilise
+}
+
+package "Fonctionnalités" {
+    [Catalogue]
+    [Commentaire]
+    [Forum]
+    [Live]
+    [Analyse]
+    [Moderation]
+    [PreferenceUtilisateur]
+
+    Catalogue --> Commentaire : utilise
+    Catalogue --> Forum : utilise
+    Catalogue --> Live : utilise
+    Catalogue --> Analyse : utilise
+    Moderation --> Commentaire : utilise
+    Moderation --> Forum : utilise
+    Moderation --> Live : utilise
+}
+
+package "UI" {
+    [InterfaceUtilisateur]
+    [VueCatalogue]
+    [VueCommentaire]
+    [VueForum]
+    [VueLive]
+
+    InterfaceUtilisateur --> VueCatalogue : affiche
+    InterfaceUtilisateur --> VueCommentaire : affiche
+    InterfaceUtilisateur --> VueForum : affiche
+    InterfaceUtilisateur --> VueLive : affiche
+}
+
+Utilisateurs --> Contenus
+Utilisateurs ---> Fonctionnalités
+UI ---> Utilisateurs
+UI ---> Contenus
+UI ---> Fonctionnalités
+
+@enduml
