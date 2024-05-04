@@ -1,96 +1,165 @@
-@startuml
+@startuml Client accède au forum
+title Client accède au forum
+
 actor Utilisateur
 
 autonumber
 Utilisateur -> Catalogue: Consulter catalogue
 activate Catalogue
+
+' Vérification du type d'utilisateur pour accès au forum
+Utilisateur -> Catalogue: Vérifier type d'abonnement
+activate Catalogue
+Catalogue --> Utilisateur: Type d'abonnement vérifié
+deactivate Catalogue
+
 alt Utilisateur avec abonnement
-    Utilisateur -> Catalogue: Accéder au forum
+    Utilisateur -> Catalogue: Demander accès au forum
     activate Catalogue
-    Utilisateur <-- Catalogue: Afficher le forum
+    Catalogue --> Utilisateur: Afficher le forum
+    deactivate Catalogue
 else Utilisateur sans abonnement
-    Utilisateur -> Catalogue: Accéder au forum
+    Utilisateur -> Catalogue: Demander accès au forum
     activate Catalogue
-    Utilisateur <-- Catalogue: Rediriger vers page abonnement
+    Catalogue --> Utilisateur: Rediriger vers page abonnement
     deactivate Catalogue
 end
 @enduml
 
-@startuml
+@startuml Client poste un commentaire
 autonumber
 
+title Client poste un commentaire
+
 actor Utilisateur
-participant Contenu
-participant Commentaire
+participant "Système de Contenu" as Contenu
+participant "Gestion des Commentaires" as Commentaire
 
 Utilisateur -> Contenu: Consulter contenu
 activate Contenu
-Utilisateur -> Commentaire: Rédiger commentaire
-activate Commentaire
-Utilisateur --> Commentaire: Poster commentaire
-deactivate Commentaire
-Utilisateur <-- Contenu: Afficher commentaire posté
+
+alt Si l'utilisateur est autorisé
+    Utilisateur -> Commentaire: Rédiger commentaire
+    activate Commentaire
+    Utilisateur -> Commentaire: Soumettre commentaire
+    Commentaire -> Contenu: Ajouter commentaire
+    Contenu --> Utilisateur: Afficher commentaire posté
+    deactivate Commentaire
+else
+    Utilisateur -> Commentaire: Tentative de rédaction
+    Commentaire --> Utilisateur: Refuser l'accès (Non autorisé)
+end
 deactivate Contenu
 @enduml
 
-@startuml
+
+@startuml Professionnel de l'audiovisuel envoie du contenu
 autonumber
 
-actor ProfessionnelAudiovisuel
-participant Catalogue
-participant Contenu
+title Professionnel de l'audiovisuel envoie du contenu
 
-ProfessionnelAudiovisuel -> Catalogue: Accéder au catalogue
+actor ProfessionnelAudiovisuel
+participant "Interface de Catalogue" as Catalogue
+participant "Système de Validation" as Validation
+participant "Serveur de Stockage" as Stockage
+participant "Environnement local" as Contenu
+
+ProfessionnelAudiovisuel -> Catalogue: Accéder à l'interface d'envoi
 activate Catalogue
-ProfessionnelAudiovisuel -> Contenu: Envoyer contenu
+
+ProfessionnelAudiovisuel -> Contenu: Sélectionner fichier à envoyer
 activate Contenu
-ProfessionnelAudiovisuel <-- Contenu: Confirmation d'envoi
+
+ProfessionnelAudiovisuel -> Validation: Demander validation du fichier
+activate Validation
+Validation --> ProfessionnelAudiovisuel: Résultat de la validation
+deactivate Validation
+
+alt Si le fichier est valide
+    ProfessionnelAudiovisuel -> Stockage: Upload du fichier
+    activate Stockage
+    Stockage --> ProfessionnelAudiovisuel: Confirmation d'upload
+    deactivate Stockage
+
+    Contenu -> Catalogue: Intégrer le contenu au catalogue
+    Catalogue --> ProfessionnelAudiovisuel: Confirmation d'intégration
+else Si le fichier n'est pas valide
+    Validation -> ProfessionnelAudiovisuel: Envoyer message d'erreur
+end
+
 deactivate Contenu
-ProfessionnelAudiovisuel <-- Catalogue: Retour au catalogue
+ProfessionnelAudiovisuel --> Catalogue: Fin de session
 deactivate Catalogue
 @enduml
 
-@startuml
+@startuml Administrateur recherche un utilisateur
 autonumber
+
+title Administrateur recherche un utilisateur
 
 actor Administrateur
-participant Utilisateur
+participant "Système de Gestion des Utilisateurs" as Système
 
-Administrateur -> Utilisateur: Rechercher utilisateur
-activate Utilisateur
-Administrateur <-- Utilisateur: Résultats recherche
-deactivate Utilisateur
+Administrateur -> Système: Envoyer requête de recherche
+activate Système
 
-alt Utilisateur à modifier
-    Administrateur -> Utilisateur: Modifier utilisateur
-    activate Utilisateur
-    Administrateur <-- Utilisateur: Confirmation modification
-    deactivate Utilisateur
+Système -> Système: Chercher dans la base de données
+activate Système
+
+alt Utilisateur trouvé
+    Système --> Administrateur: Renvoyer résultats de recherche
+    deactivate Système
+
+    Administrateur -> Système: Demander modification de l'utilisateur
+    activate Système
+    Système -> Système: Modifier utilisateur dans la base de données
+    Système --> Administrateur: Confirmer modification
+    deactivate Système
 else Utilisateur non trouvé
-    Administrateur <-- Utilisateur: Aucun utilisateur trouvé
+    Système --> Administrateur: Aucun utilisateur trouvé
+    deactivate Système
 end
+
 @enduml
 
-@startuml
+
+@startuml Réinitialisation du mot de passe
 autonumber
 
-actor Utilisateur
-participant InterfaceUtilisateur
-participant BaseDeDonnees
+title Réinitialisation du mot de passe
 
-Utilisateur -> InterfaceUtilisateur: Accéder à l'interface de réinitialisation
+actor Utilisateur
+participant "Interface de Réinitialisation" as InterfaceUtilisateur
+participant "Service de Gestion des Utilisateurs" as BaseDeDonnees
+participant "Service d'Email" as EmailService
+
+Utilisateur -> InterfaceUtilisateur: Demande de réinitialisation
 activate InterfaceUtilisateur
-InterfaceUtilisateur -> Utilisateur: Demander l'adresse e-mail de récupération
+
+InterfaceUtilisateur -> Utilisateur: Demander l'adresse e-mail
 Utilisateur -> InterfaceUtilisateur: Fournir l'adresse e-mail
-InterfaceUtilisateur -> BaseDeDonnees: Vérifier l'adresse e-mail
 activate BaseDeDonnees
-BaseDeDonnees --> InterfaceUtilisateur: Adresse e-mail valide
-InterfaceUtilisateur -> BaseDeDonnees: Générer un lien de réinitialisation
-BaseDeDonnees --> InterfaceUtilisateur: Lien de réinitialisation généré
+InterfaceUtilisateur -> BaseDeDonnees: Vérifier l'adresse e-mail
+BaseDeDonnees --> InterfaceUtilisateur: Confirmation adresse e-mail
+
+alt Adresse e-mail valide
+    BaseDeDonnees -> EmailService: Générer et envoyer lien de réinitialisation
+    activate EmailService
+    EmailService --> BaseDeDonnees: Lien envoyé
+    deactivate EmailService
+    InterfaceUtilisateur -> Utilisateur: Informer de l'envoi de l'email
+else Adresse e-mail non valide
+    InterfaceUtilisateur -> Utilisateur: Erreur, adresse non trouvée
+end
 deactivate BaseDeDonnees
-InterfaceUtilisateur -> Utilisateur: Afficher lien de réinitialisation
-Utilisateur -> InterfaceUtilisateur: Cliquer sur le lien de réinitialisation
-InterfaceUtilisateur -> BaseDeDonnees: Réinitialiser le mot de passe
-BaseDeDonnees --> InterfaceUtilisateur: Mot de passe réinitialisé
 deactivate InterfaceUtilisateur
+
+Utilisateur -> EmailService: Cliquer sur le lien de réinitialisation (via email)
+activate EmailService
+EmailService -> BaseDeDonnees: Valider lien et réinitialiser mot de passe
+activate BaseDeDonnees
+BaseDeDonnees --> EmailService: Mot de passe réinitialisé
+deactivate BaseDeDonnees
+EmailService -> Utilisateur: Confirmation de réinitialisation
+deactivate EmailService
 @enduml

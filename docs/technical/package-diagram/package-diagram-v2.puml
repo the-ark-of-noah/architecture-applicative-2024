@@ -1,44 +1,20 @@
-@startuml
+@startuml Diagramme de package - EPSIFLIX
 
-package "Utilisateurs" {
-    [ClientSansAbonnement]
-    [ClientAvecAbonnement]
-    [ProfessionnelAudiovisuel]
-    [Administrateur]
-    [EquipeEPSIFLIX]
-}
+left to right direction
+skinparam packageStyle rect
+skinparam packageTitleAlignment left
+skinparam packageTitleJustification left
 
-package "Contenus" {
-    [Contenu]
-    [BandeAnnonce]
+package "Presentation" as UI{
+    [Interface Utilisateur Web] as InterfaceUtilisateur
+    [Vue du Catalogue] as VueCatalogue
+    [Vue des Commentaires] as VueCommentaire
+    [Vue du Forum] as VueForum
+    [Vue des Lives] as VueLive
 
-    Contenu --> BandeAnnonce : utilise
-}
-
-package "Fonctionnalités" {
-    [Catalogue]
-    [Commentaire]
-    [Forum]
-    [Live]
-    [Analyse]
-    [Moderation]
-    [PreferenceUtilisateur]
-
-    Catalogue --> Commentaire : utilise
-    Catalogue --> Forum : utilise
-    Catalogue --> Live : utilise
-    Catalogue --> Analyse : utilise
-    Moderation --> Commentaire : utilise
-    Moderation --> Forum : utilise
-    Moderation --> Live : utilise
-}
-
-package "UI" {
-    [InterfaceUtilisateur]
-    [VueCatalogue]
-    [VueCommentaire]
-    [VueForum]
-    [VueLive]
+    component "API Web" as API {
+        note left: Point d'entrée pour les requêtes externes
+    }
 
     InterfaceUtilisateur --> VueCatalogue : affiche
     InterfaceUtilisateur --> VueCommentaire : affiche
@@ -46,10 +22,67 @@ package "UI" {
     InterfaceUtilisateur --> VueLive : affiche
 }
 
-Utilisateurs --> Contenus
-Utilisateurs ---> Fonctionnalités
-UI ---> Utilisateurs
-UI ---> Contenus
-UI ---> Fonctionnalités
+
+package "Métier" {
+  component "Gestion des Utilisateurs" as UserManager
+  component "Gestion du Contenu" as VideoManager
+  component "Gestion des Abonnements" as SubscriptionManager
+
+    [Catalogue de Videos] as Catalogue
+    [Commentaires]
+    [Forums]
+    [Lives]
+    [Videos]
+    [Preference des Utilisateurs] as PreferenceUtilisateur
+
+    VideoManager --> Commentaires : utilise
+    VideoManager --> Lives : utilise
+    VideoManager --> Forums : utilise
+    VideoManager --> Videos : utilise
+    VideoManager --> Catalogue : utilise
+
+    UserManager --> PreferenceUtilisateur : utilise
+
+    SubscriptionManager --> Catalogue : utilise
+
+}
+
+package "Données" {
+  component "Base de Données" as DB {
+    note right: Stocke les informations utilisateurs, abonnements, et métadonnées de vidéos
+  }
+  component "Stockage d'Objets" as ObjectStorage {
+    note right: Stocke les fichiers vidéo
+  }
+}
+
+package "Services Externes" {
+  component "Service d'Authentification" as AuthService {
+    note left: Gère l'authentification et la sécurité
+  }
+  component "Service d'Analyse" as AnalyticsService {
+    note left: Fournit des analyses sur l'utilisation et les comportements des utilisateurs
+  }
+  component "Service de Paiement" as PaymentService {
+    note left: Gère les transactions et les abonnements payants
+  }
+}
+
+' Relations
+InterfaceUtilisateur ...> API : Utilise
+API ...> UserManager : Utilise
+API ...> VideoManager : Utilise
+API ...> SubscriptionManager : Utilise
+
+UserManager ...> DB : Utilise
+VideoManager ...> DB : Utilise
+VideoManager ...> ObjectStorage : Utilise
+SubscriptionManager ...> DB : Utilise
+SubscriptionManager ...> PaymentService : Utilise
+
+AuthService ...> UserManager : Valide
+AnalyticsService ...> API : Collecte les données
+PaymentService ...> SubscriptionManager : Gère les paiements
+
 
 @enduml

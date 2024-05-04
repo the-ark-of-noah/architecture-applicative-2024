@@ -1,7 +1,5 @@
-@startuml
-
-@startuml
-
+@startuml Domain model
+ 
 package "Gestion des utilisateurs" {
   class User {
     -String username

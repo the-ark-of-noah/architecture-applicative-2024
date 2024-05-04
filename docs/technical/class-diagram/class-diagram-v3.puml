@@ -1,7 +1,20 @@
-@startuml
+@startuml diagramme de classe - EPSIFLIX
 class Utilisateur {
-    +identifiant: String
-    +motDePasse: String
+    -identifiant: UUID
+    -motDePasse: String
+    - nom: String
+    - prenom: String
+    - dateNaissance: Date
+    - email: String
+    + seConnecter(): void
+    + seDeconnecter(): void
+    + modifierMotDePasse(AncienMotDePasse: String, NouveauMotDePasse: String): void
+    + modifierProfil(): void
+    + consulterProfil(): void
+    + consulterHistorique(): void
+    + consulterRecommandations(): void
+    + consulterCoupDeCoeur(): void
+    + consulterContenus(): void
 }
 
 class ClientSansAbonnement {
@@ -10,22 +23,39 @@ class ClientSansAbonnement {
     +voirDetailsContenu(): void
 }
 
+' +visionnerEnIllimite(): void
+
 class ClientAvecAbonnement {
-    +visionnerIllimite(): void
-    +posterCommentaire(): void
+    - dateDebut: Date
+    - dateFin: Date
+    +consulterHistorique(): void
+    +consulterRecommandations(): void
+    +consulterCoupDeCoeur(): void
+    +visionnerContenuEnIllimite(): void
+    +posterCommentaire(contenu: String): void
     +accederForum(): void
-    +visionnerLive(): void
+    +participerLive(theme: String): void
+}
+
+' Doit on referencer la relation entre ClientAvecAbonnement et TypeAbonnement explicitement ?
+ClientAvecAbonnement --> TypeAbonnement
+
+enum TypeAbonnement {
+    BASIQUE
+    PREMIUM
+    FAMILY
 }
 
 class ProfessionnelAudiovisuel {
     +accederTableauDeBord(): void
-    +organiserLive(): void
-    +envoyerContenu(): void
+    +organiserLive(theme: String): void
+    +envoyerContenu(contenu: Contenu): void 
 }
 
 class Administrateur {
     +gererContenusUtilisateurs(): void
     +modererInteractions(): void
+    + suivreInteractions(): void
     +accederTableauDeBordAnalyse(): void
 }
 
@@ -34,44 +64,73 @@ class EquipeEPSIFLIX {
     +donnerCoupDeCoeur(): void
 }
 
-Utilisateur "1"--o ClientSansAbonnement
-Utilisateur "1"--o ClientAvecAbonnement
-Utilisateur "1"--o ProfessionnelAudiovisuel
-Utilisateur "1"--o Administrateur
-Utilisateur "1"--o EquipeEPSIFLIX
 
-class Contenu {
-    +titre: String
-    +categorie: String
-    +description: String
+class "ContenuVideo" as Contenu {
+    - titre: String
+    - description: String
+    - dateAjout: Date
+    - duree: String 
+    - lien: String
+    + visionner(): void
+    + ajouterCoupDeCoeur(): void
 }
 
+class Metadonnees {
+    - genre : String
+    - dateDeSortie: Date
+}
+
+Contenu --o Metadonnees
+
+
+enum Categorie {
+    FILM
+    SERIE
+    DOCUMENTAIRE
+    SPECTACLE
+    EMISSION
+}
+
+Contenu --o Categorie
+Serie --|> Contenu
+
+class Serie {
+    -nombreSaisons: Integer
+}
+
+class Episode {
+    - titre: String
+    - numero: Integer
+    - duree: String
+}
+
+Serie "1" *-- "1..*" Episode
+
 class Catalogue {
-    +contenus: List
+    -contenus: Contenu
+    +rechercherContenu(): void
+    +filtrerContenu(): void
+    +trierContenu(): void
+    +consulterCatalogue(): void
 }
 
 class BandeAnnonce {
-    +lien: String
+    -lien: String
+    -duree: String
+    -dateDeSortie: Date
 }
 
 class Commentaire {
-    +utilisateur: Utilisateur
-    +contenu: String
-    +date: Date
+    -contenu: String
+    -date: Date
 }
 
 class Forum {
-    +saison: String
+    -saison: String
 }
 
 class Live {
-    +theme: String
-}
-
-class Analyse {
-    +tendancesConsommation: String
-    +performancesContenus: String
-    +statistiquesPreferences: String
+    -theme: String
 }
 
 class Moderation {
@@ -83,13 +142,26 @@ class PreferenceUtilisateur {
     +categoriePreferee: String
 }
 
-Catalogue "1" -- "0..*" Contenu
-Catalogue "1" *-- "0..1" BandeAnnonce
-Contenu "1" *-- "0..*" Commentaire
+Catalogue "1" --o "0..*" Contenu
+Contenu "1" *-- "0..*" BandeAnnonce
+Live "1" *-- "0..*" Commentaire
+Forum "1" *-- "0..*" Commentaire
 Contenu "1" *-- "0..*" Forum
-Contenu "1" *-- "0..*" Live
-Contenu "1" *-- "0..1" Analyse
-Commentaire "1" *-- "1" Utilisateur
-Moderation "1" *-- "1" Utilisateur
-PreferenceUtilisateur "1" -- "1" Utilisateur
+' Contenu "1" *-- "0..*" Live
+
+
+Commentaire "1" --* "1" Utilisateur
+Commentaire  "1" o-- "1" Moderation
+Forum "1" o-- "1" Moderation
+Live "1" o-- "1" Moderation
+
+PreferenceUtilisateur "1" -- "1" ClientAvecAbonnement
+PreferenceUtilisateur "1" -- "1" ClientSansAbonnement
+
+ClientSansAbonnement --|> Utilisateur
+ClientAvecAbonnement --|> Utilisateur
+ProfessionnelAudiovisuel --|> Utilisateur
+Administrateur --|> Utilisateur
+EquipeEPSIFLIX --|> Utilisateur
+
 @enduml
