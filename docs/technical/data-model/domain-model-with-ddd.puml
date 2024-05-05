@@ -1,117 +1,123 @@
-@startuml Domain model
- 
+@startuml Updated Domain Model
+
+' Gestion des Utilisateurs
 package "Gestion des utilisateurs" {
-  class User {
-    -String username
-    -String password
-    -Email email
-    -Profile profile
-    -Subscription subscription
-    +register()
-    +login()
-    +updateProfile(Profile profile)
+  class Utilisateur << AR >>{
+    -identifiant: UUID
+    -motDePasse: String
+    -nom: String
+    -prenom: String
+    -dateNaissance: Date
+    -email: String
+    +seConnecter(): void
+    +seDeconnecter(): void
+    +modifierMotDePasse(AncienMotDePasse: String, NouveauMotDePasse: String): void
+    +modifierProfil(): void
+    +consulterProfil(): void
   }
 
-  class Profile {
-    -String firstName
-    -String lastName
-    -Address address
-    +updateAddress(Address newAddress)
+  class ClientSansAbonnement << VO >> {
+    +choisirContenu(): void
+    +enregistrerContenu(): void
+    +voirDetailsContenu(): void
   }
 
-  class Email {
-    -String emailAddress
+  class ClientAvecAbonnement << VO >> {
+    -dateDebut: Date
+    -dateFin: Date
+    +consulterHistorique(): void
+    +consulterRecommandations(): void
+    +consulterCoupDeCoeur(): void
+    +visionnerContenuEnIllimite(): void
+    +posterCommentaire(contenu: String): void
+    +accederForum(): void
+    +participerLive(theme: String): void
   }
 
-  class Address {
-    -String street
-    -String city
-    -String zipCode
-    -String country
+  class TypeAbonnement << VO >> {
+    BASIQUE
+    PREMIUM
+    FAMILY
   }
 
-  class Subscription {
-    -Date startDate
-    -SubscriptionType type
-    -SubscriptionStatus status
-    +updateSubscriptionType(SubscriptionType type)
+  class PreferenceUtilisateur << VO >> {
+    -genre: String
+    -categorie: String
+    -acteur: String
+    -realisateur: String
   }
 }
 
+' Catalogue de contenu
 package "Catalogue de contenu" {
-  class Video {
-    -String title
-    -Duration duration
-    -VideoMetadata metadata
-    +getVideoDetails()
-    +updateMetadata(VideoMetadata metadata)
+  class Contenu << AR >> {
+    -titre: String
+    -description: String
+    -dateAjout: Date
+    -duree: String
+    -lien: String
+    +visionner(): void
   }
 
-  class Series extends Video {
-    -List<Episode> episodes
-    +addEpisode(Episode episode)
-    }
-
-
-  class Episode {
-    -String episodeTitle
-    -int episodeNumber
-    -Duration duration
+  class Metadonnees << VO >> {
+    -genre: String
+    -dateDeSortie: Date
   }
 
-  class VideoMetadata {
-    -String genre
-    -String director
-    -Date releaseDate
+  class Serie << VO >> {
+    -nombreSaisons: Integer
   }
 
-  class Duration {
-    -int hours
-    -int minutes
+  class Episode << VO >> {
+    -titre: String
+    -numero: Integer
+    -duree: String
+  }
+
+  class Categorie << VO >> {
+    FILM
+    SERIE
+    DOCUMENTAIRE
+    SPECTACLE
+    EMISSION
   }
 }
 
 package "Interaction des utilisateurs" {
-  class Comment {
-    -User user
-    -String text
-    -Date timestamp
-    +editComment(String newText)
+  class Interaction << AR >> {
+    +posterCommentaire(commentaire: Commentaire): void
+    +lireCommentaire(): Commentaire[]
+    +participerForum(theme: String): void
+    +assisterLive(theme: String): void
   }
 
-  class Review extends Comment {
-    -int rating
+  class Commentaire << VO >> {
+    -contenu: String
+    -date: Date
+  }
+
+  class Forum << VO >> {
+    -saison: String
+  }
+
+  class Live << VO >> {
+    -theme: String
+  }
+
+  class Moderation {
+    +suiviInteractions: String
+    +moderer(): void
   }
 }
 
-package "Analytics et Reporting" {
-  class Report {
-    -DateRange dateRange
-    -List metrics
-    -List dimensions
-    +generateReport()
-        -Metric metrics
-        +generateReport()
-      }
-
-      class Metric {
-        -String name
-        -double value
-      }
-
-      class DateRange {
-        -Date startDate
-        -Date endDate
-      }
-    }
-
-    ' Associations
-    User "1" -- "0..*" Comment : writes >
-    User "1" -- "1" Profile : has >
-    User "1" -- "0..1" Subscription : subscribes >
-    Video "1" -- "0..*" Episode : includes >
-    Series "1" -- "*" Episode : contains >
-
-    @enduml
+Utilisateur <|-- ClientSansAbonnement
+Utilisateur <|-- ClientAvecAbonnement
+Contenu "1" *-- "*" Metadonnees
+Serie --|> Contenu
+Serie "1" *-- "1..*" Episode
+Contenu "1" o-- "0..*" Categorie
+ClientAvecAbonnement --> TypeAbonnement
+ClientAvecAbonnement "1" -- "*" PreferenceUtilisateur
+ClientSansAbonnement "1" -- "*" PreferenceUtilisateur
 
 @enduml
