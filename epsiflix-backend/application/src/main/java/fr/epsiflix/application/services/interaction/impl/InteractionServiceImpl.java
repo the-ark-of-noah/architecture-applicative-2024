@@ -1,6 +1,6 @@
 package fr.epsiflix.application.services.impl;
 
-public class InteractionService {
+public class InteractionServiceImpl {
 
     public InteractionService() {}
 

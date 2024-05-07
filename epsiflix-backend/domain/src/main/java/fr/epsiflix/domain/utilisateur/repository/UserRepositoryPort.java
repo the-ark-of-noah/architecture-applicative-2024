@@ -1,4 +1,4 @@
-interface InteractionRepository {
+interface UserRepository {
     void addInteraction(Interaction interaction);
     void updateInteraction(Interaction interaction);
     void deleteInteraction(UniqueId interactionId);
