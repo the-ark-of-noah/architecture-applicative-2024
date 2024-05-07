@@ -1,0 +1,1 @@
+package fr.epsiflix.infrastructure.common.configuration;

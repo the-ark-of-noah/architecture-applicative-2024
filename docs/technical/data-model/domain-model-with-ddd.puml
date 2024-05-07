@@ -2,7 +2,7 @@
 
 ' Gestion des Utilisateurs
 package "Gestion des utilisateurs" {
-  class Utilisateur << AR >>{
+  class Utilisateur << AR >> {
     -identifiant: UUID
     -motDePasse: String
     -nom: String
@@ -34,7 +34,25 @@ package "Gestion des utilisateurs" {
     +participerLive(theme: String): void
   }
 
-  class TypeAbonnement << VO >> {
+  class ProfessionnelAudiovisuel << AR >> {
+    +accederTableauDeBord(): void
+    +organiserLive(theme: String): void
+    +envoyerContenu(contenu: Contenu): void
+  }
+
+  class EquipeEPSIFLIX << AR >> {
+    +classerContenus(): void
+    +donnerCoupDeCoeur(): void
+  }
+
+  class Administrateur << AR >> {
+    +gererContenusUtilisateurs(): void
+    +modererInteractions(): void
+    +suivreInteractions(): void
+    +accederTableauDeBordAnalyse(): void
+  }
+
+  enum TypeAbonnement << VO >> {
     BASIQUE
     PREMIUM
     FAMILY
@@ -50,7 +68,7 @@ package "Gestion des utilisateurs" {
 
 ' Catalogue de contenu
 package "Catalogue de contenu" {
-  class Contenu << AR >> {
+  entity Contenu << AR >> {
     -titre: String
     -description: String
     -dateAjout: Date
@@ -74,12 +92,26 @@ package "Catalogue de contenu" {
     -duree: String
   }
 
-  class Categorie << VO >> {
+  enum Categorie << VO >> {
     FILM
     SERIE
     DOCUMENTAIRE
     SPECTACLE
     EMISSION
+  }
+
+  class Catalogue << AR >> {
+    -contenus: List<Contenu>
+    +rechercherContenu(): void
+    +filtrerContenu(): void
+    +trierContenu(): void
+    +consulterCatalogue(): void
+  }
+
+  class BandeAnnonce << VO >> {
+    -lien: String
+    -duree: String
+    -dateDeSortie: Date
   }
 }
 
@@ -112,6 +144,9 @@ package "Interaction des utilisateurs" {
 
 Utilisateur <|-- ClientSansAbonnement
 Utilisateur <|-- ClientAvecAbonnement
+Utilisateur <|-- ProfessionnelAudiovisuel
+Utilisateur <|-- EquipeEPSIFLIX
+Utilisateur <|-- Administrateur
 Contenu "1" *-- "*" Metadonnees
 Serie --|> Contenu
 Serie "1" *-- "1..*" Episode

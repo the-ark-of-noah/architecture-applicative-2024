@@ -1,0 +1,1 @@
+// Endroit idéal pour mettre en place des méthodes communes à toutes les entités
