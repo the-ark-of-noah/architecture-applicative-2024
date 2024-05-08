@@ -25,14 +25,25 @@
             <artifactId>infrastructure</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
         <dependency>
             <groupId>fr.epsiflix</groupId>
             <artifactId>application</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
-        <!--  Dépendances de spring -->
+        <!--        Cache pour Spring boot-->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <scope>provided</scope>
+            <version>5.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -44,41 +55,147 @@
             <scope>test</scope>
         </dependency>
 
+        <!--        Ajout pour openapi-generator-maven-plugin-->
+        <!-- https://mvnrepository.com/artifact/org.openapitools/jackson-databind-nullable -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+        <!--        Ajout pour Swagger-->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>2.2.21</version>
             <type>pom</type>
         </dependency>
-
+        <!--        Ajout pour mapstruct-->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+        <!--        Génération de données aléatoire pour les tests-->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>1.0.2</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--        Annotations pour lancer le projet dans IntelliJ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--        Metrics prometheus-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <!--        Spring-security-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <version>6.2.2</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.2.224</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
     </dependencies>
+
+    <!--    Build packages pour la documentation de l'API-->
+    <!--    <build>-->
+    <!--        <plugins>-->
+    <!--            Configuration globale si tout était sous les mêmes packages-->
+    <!--            <plugin>-->
+    <!--                &lt;!&ndash; https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin &ndash;&gt;-->
+    <!--                <groupId>org.openapitools</groupId>-->
+    <!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
+    <!--                <version>7.3.0</version>-->
+    <!--                <executions>-->
+    <!--                    <execution>-->
+    <!--                        <goals>-->
+    <!--                            <goal>generate</goal>-->
+    <!--                        </goals>-->
+    <!--                        <configuration>-->
+    <!--                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>-->
+    <!--                            <generatorName>spring</generatorName>-->
+    <!--                            <apiPackage>com.ecomm.exposition.api</apiPackage>-->
+    <!--                            <modelPackage>com.ecomm.exposition.model</modelPackage>-->
+    <!--                            &lt;!&ndash;                            A dupliquer par sous domaine, donc pas ouf&ndash;&gt;-->
+    <!--                            &lt;!&ndash;                            A pour pour après&ndash;&gt;-->
+    <!--                            <modelNameSuffix>Dto</modelNameSuffix>-->
+    <!--                            &lt;!&ndash;                        <apiPackage>com.ecomm.exposition.api.*.dto</apiPackage> &ndash;&gt;-->
+    <!--                            <apiPackage>com.ecomm.exposition.api</apiPackage>-->
+    <!--                            <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>-->
+    <!--                            <typeMappings>-->
+    <!--                                <typeMapping>number=Double</typeMapping>-->
+    <!--                                <typeMapping>OffsetDateTime=LocalDateTime</typeMapping>-->
+    <!--                            </typeMappings>-->
+    <!--                            <importMappings>-->
+    <!--                                &lt;!&ndash;                            <importMapping>LocalDateTime=java.time.LocalDateTime</importMapping>&ndash;&gt;-->
+    <!--                                <importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>-->
+    <!--                            </importMappings>-->
+    <!--                            <configOptions>-->
+    <!--                                <library>spring-boot</library>-->
+    <!--                                <interfaceOnly>true</interfaceOnly>-->
+    <!--                                <useTags>true</useTags>-->
+    <!--                                <useOptional>true</useOptional>-->
+    <!--                                <hideGenerationTimestamp>true</hideGenerationTimestamp>-->
+    <!--                                <unhandledException>true</unhandledException>-->
+    <!--                            </configOptions>-->
+    <!--                        </configuration>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!---->
+    <!--    Spring Boot Maven Plugin-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.springframework.boot</groupId>-->
+    <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+    <!--                <configuration>-->
+    <!--                    <mainClass>com.ecomm.exposition.EcommerceApplication</mainClass>-->
+    <!--                </configuration>-->
+    <!--                <executions>-->
+    <!--                    <execution>-->
+    <!--                        <goals>-->
+    <!--                            <goal>repackage</goal>-->
+    <!--                        </goals>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!---->
+    <!--    Maven Compiler Plugin for MapStruct-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+    <!--                <configuration combine.self="override">-->
+    <!--                    <compilerArgs>-->
+    <!--                        <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>-->
+    <!--                        <arg>-Amapstruct.defaultComponentModel=spring</arg>-->
+    <!--                    </compilerArgs>-->
+    <!--                    <source>${java.version}</source>-->
+    <!--                    <target>${java.version}</target>-->
+    <!--                    <annotationProcessorPaths>-->
+    <!--                        <path>-->
+    <!--                            <groupId>org.mapstruct</groupId>-->
+    <!--                            <artifactId>mapstruct-processor</artifactId>-->
+    <!--                            <version>1.5.5.Final</version>-->
+    <!--                        </path>-->
+    <!--                    </annotationProcessorPaths>-->
+    <!--                </configuration>-->
+    <!--            </plugin>-->
+    <!--        </plugins>-->
+    <!--    </build>-->
 
 </project>
