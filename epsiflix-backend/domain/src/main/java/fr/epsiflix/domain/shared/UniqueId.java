@@ -1,3 +1,5 @@
+package java.fr.epsiflix.domain.shared;
+
 public class UniqueId {
     private String UUID;
 

@@ -4,4 +4,4 @@
  * et les détails associés comme les bandes annonces et les épisodes.
  */
 
-package fr.epsiflix.domain.catalogue.model;
+package java.fr.epsiflix.domain.catalogue.model;

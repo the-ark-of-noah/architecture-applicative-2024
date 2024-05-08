@@ -1,11 +1,10 @@
 package fr.epsiflix.catalogue;
 
-public class Catalogue {
+import java.fr.epsiflix.domain.shared.UniqueId;
+
+public class Catalogue extends BaseEntity<UniqueId, Catalogue> {
     private Contenu[] contenus;
-
     public Catalogue() {}
-
-
 
     public void rechercherContenu() {}
     public void filtrerContenu() {}

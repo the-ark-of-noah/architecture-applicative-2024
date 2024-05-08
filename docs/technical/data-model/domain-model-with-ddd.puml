@@ -65,7 +65,6 @@ package "Gestion des utilisateurs" {
     -realisateur: String
   }
 }
-
 ' Catalogue de contenu
 package "Catalogue de contenu" {
   entity Contenu << AR >> {
@@ -75,6 +74,9 @@ package "Catalogue de contenu" {
     -duree: String
     -lien: String
     +visionner(): void
+    -metadonnees: Metadonnees
+    -episodes: List<Episode>
+    -bandeAnnonces: List<BandeAnnonce>
   }
 
   class Metadonnees << VO >> {
@@ -82,8 +84,9 @@ package "Catalogue de contenu" {
     -dateDeSortie: Date
   }
 
-  class Serie << VO >> {
+  entity Serie << AR >> {
     -nombreSaisons: Integer
+    -episodes: List<Episode>
   }
 
   class Episode << VO >> {
@@ -100,12 +103,12 @@ package "Catalogue de contenu" {
     EMISSION
   }
 
-  class Catalogue << AR >> {
+  entity Catalogue << AR >> {
     -contenus: List<Contenu>
-    +rechercherContenu(): void
-    +filtrerContenu(): void
-    +trierContenu(): void
-    +consulterCatalogue(): void
+    +rechercherContenu(criteres): List<Contenu>
+    +filtrerContenu(filtre): List<Contenu>
+    +trierContenu(critere): List<Contenu>
+    +consulterCatalogue(): List<Contenu>
   }
 
   class BandeAnnonce << VO >> {
@@ -114,6 +117,7 @@ package "Catalogue de contenu" {
     -dateDeSortie: Date
   }
 }
+
 
 package "Interaction des utilisateurs" {
   class Interaction << AR >> {
